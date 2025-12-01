@@ -1,0 +1,24 @@
+# Enforce LF line endings for text files across platforms
+* text eol=lf
+
+# Common code/text types explicitly as LF
+*.py   text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.csv  text eol=lf
+
+# Binary assets: never apply EOL conversion
+*.wav   binary
+*.mp3   binary
+*.flac  binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.pth   binary
+*.zip   binary
+*.exe   binary
+*.dll   binary

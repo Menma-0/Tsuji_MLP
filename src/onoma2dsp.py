@@ -60,13 +60,14 @@ class Onoma2DSP:
         self.dsp_engine = DSPEngine(sample_rate=sample_rate)
         self.mapper = DSPParameterMapping()
 
-    def process(self, onomatopoeia: str, input_audio_path: str,
-               output_audio_path: str, verbose: bool = True) -> dict:
+    def process(self, source_onomatopoeia: str, target_onomatopoeia: str,
+               input_audio_path: str, output_audio_path: str, verbose: bool = True) -> dict:
         """
-        オノマトペから音声処理まで実行
+        2つのオノマトペの差分から音声処理まで実行
 
         Args:
-            onomatopoeia: オノマトペ（カタカナ）
+            source_onomatopoeia: 現在の音声を表すオノマトペ（カタカナ）
+            target_onomatopoeia: 編集後の音声を表すオノマトペ（カタカナ）
             input_audio_path: 入力音声ファイルパス
             output_audio_path: 出力音声ファイルパス
             verbose: 詳細表示するか
@@ -76,36 +77,57 @@ class Onoma2DSP:
         """
         if verbose:
             print("\n" + "="*60)
-            print(f"ONOMATOPOEIA TO DSP PROCESSING")
+            print(f"DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING")
             print("="*60)
-            print(f"\nOnomatopoeia: {onomatopoeia}")
+            print(f"\nSource (current sound): {source_onomatopoeia}")
+            print(f"Target (desired sound): {target_onomatopoeia}")
             print(f"Input audio: {input_audio_path}")
             print(f"Output audio: {output_audio_path}")
             print()
 
-        # ステップ1: 特徴量抽出
+        # ステップ1: 2つのオノマトペから特徴量抽出
         if verbose:
-            print("[1/3] Extracting features from onomatopoeia...")
+            print("[1/4] Extracting features from source onomatopoeia...")
 
-        phonemes = self.katakana_converter.convert(onomatopoeia)
-        moras = self.mora_converter.convert(phonemes)
-        features = self.feature_extractor.extract_features(phonemes, moras)
+        # Source特徴量
+        source_phonemes = self.katakana_converter.convert(source_onomatopoeia)
+        source_moras = self.mora_converter.convert(source_phonemes)
+        source_features = self.feature_extractor.extract_features(source_phonemes, source_moras)
+
+        if verbose:
+            print(f"  Source phonemes: {source_phonemes}")
+            print(f"  Source moras: {[''.join(m) for m in source_moras]}")
+
+        # Target特徴量
+        if verbose:
+            print("\n[2/4] Extracting features from target onomatopoeia...")
+
+        target_phonemes = self.katakana_converter.convert(target_onomatopoeia)
+        target_moras = self.mora_converter.convert(target_phonemes)
+        target_features = self.feature_extractor.extract_features(target_phonemes, target_moras)
+
+        if verbose:
+            print(f"  Target phonemes: {target_phonemes}")
+            print(f"  Target moras: {[''.join(m) for m in target_moras]}")
+
+        # 差分を計算
+        feature_diff = target_features - source_features
 
         if self.scaler is not None:
-            features = self.scaler.transform(features.reshape(1, -1))[0]
+            # 差分もスケーリング（元の特徴量と同じスケールで）
+            feature_diff = self.scaler.transform(feature_diff.reshape(1, -1))[0]
 
         if verbose:
-            print(f"  Phonemes: {phonemes}")
-            print(f"  Moras: {[''.join(m) for m in moras]}")
-            print(f"  Feature vector: 38 dimensions")
+            print(f"\n  Feature difference vector: 38 dimensions")
+            print(f"  Difference magnitude: {np.linalg.norm(feature_diff):.3f}")
 
-        # ステップ2: DSPパラメータ推論
+        # ステップ3: 差分からDSPパラメータを推論
         if verbose:
-            print("\n[2/3] Predicting DSP parameters...")
+            print("\n[3/4] Predicting DSP parameters from feature difference...")
 
         with torch.no_grad():
-            features_tensor = torch.FloatTensor(features).unsqueeze(0).to(self.device)
-            normalized_params = self.model(features_tensor).cpu().numpy()[0]
+            diff_tensor = torch.FloatTensor(feature_diff).unsqueeze(0).to(self.device)
+            normalized_params = self.model(diff_tensor).cpu().numpy()[0]
 
         # モデル出力を増幅（より大きな変化を生み出すため）
         normalized_params = np.clip(normalized_params * self.amplification_factor, -1.0, 1.0)
@@ -122,9 +144,9 @@ class Onoma2DSP:
                 else:
                     print(f"    {key:<25}: {value:>7.2f}")
 
-        # ステップ3: 音声処理
+        # ステップ4: 音声処理
         if verbose:
-            print(f"\n[3/3] Applying DSP effects to audio...")
+            print(f"\n[4/4] Applying DSP effects to audio...")
 
         self.dsp_engine.process_audio_file(
             input_audio_path,
@@ -138,9 +160,13 @@ class Onoma2DSP:
             print("="*60 + "\n")
 
         result = {
-            'onomatopoeia': onomatopoeia,
-            'phonemes': phonemes,
-            'moras': [''.join(m) for m in moras],
+            'source_onomatopoeia': source_onomatopoeia,
+            'target_onomatopoeia': target_onomatopoeia,
+            'source_phonemes': source_phonemes,
+            'target_phonemes': target_phonemes,
+            'source_moras': [''.join(m) for m in source_moras],
+            'target_moras': [''.join(m) for m in target_moras],
+            'feature_diff_magnitude': float(np.linalg.norm(feature_diff)),
             'normalized_params': normalized_params.tolist(),
             'mapped_params': mapped_params,
             'input_audio': input_audio_path,
@@ -153,13 +179,19 @@ class Onoma2DSP:
 def main():
     """メイン関数"""
     parser = argparse.ArgumentParser(
-        description='オノマトペから音声にDSPエフェクトを適用'
+        description='2つのオノマトペの差分から音声にDSPエフェクトを適用'
     )
     parser.add_argument(
-        '--onomatopoeia', '-o',
+        '--source', '-s',
         type=str,
         required=True,
-        help='オノマトペ（カタカナ）'
+        help='現在の音声を表すオノマトペ（カタカナ）'
+    )
+    parser.add_argument(
+        '--target', '-t',
+        type=str,
+        required=True,
+        help='編集後の音声を表すオノマトペ（カタカナ）'
     )
     parser.add_argument(
         '--input', '-i',
@@ -226,7 +258,8 @@ def main():
         )
 
         result = processor.process(
-            args.onomatopoeia,
+            args.source,
+            args.target,
             args.input,
             args.output,
             verbose=not args.quiet
