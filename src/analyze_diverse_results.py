@@ -38,7 +38,7 @@ def main():
     print("DIVERSE ONOMATOPOEIA PROCESSING ANALYSIS")
     print("=" * 80)
 
-    output_dir = '../demo_audio/diverse_test'
+    output_dir = '../demo_audio/diverse_test_amplified'
 
     # オノマトペのリスト（順番を保持）
     test_onomatopoeia = [

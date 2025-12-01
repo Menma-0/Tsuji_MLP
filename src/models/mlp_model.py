@@ -144,29 +144,29 @@ class DSPParameterMapping:
             'transient_sustain', 'time_stretch'
         ]
 
-        # マッピング
+        # マッピング（より大きな変化を生み出すためにスケールを拡大）
         mapped = {}
 
-        # gain: -12dB 〜 +12dB
-        mapped['gain_db'] = 12.0 * normalized_params[0]
+        # gain: -24dB 〜 +24dB (従来の2倍)
+        mapped['gain_db'] = 24.0 * normalized_params[0]
 
-        # compression: 正規化値そのまま（DSP側で解釈）
-        mapped['compression'] = normalized_params[1]
+        # compression: 正規化値を2倍に増幅（DSP側で解釈）
+        mapped['compression'] = 2.0 * normalized_params[1]
 
-        # EQバンド: -12dB 〜 +12dB
-        mapped['eq_sub_db'] = 12.0 * normalized_params[2]
-        mapped['eq_low_db'] = 12.0 * normalized_params[3]
-        mapped['eq_mid_db'] = 12.0 * normalized_params[4]
-        mapped['eq_high_db'] = 12.0 * normalized_params[5]
-        mapped['eq_presence_db'] = 12.0 * normalized_params[6]
+        # EQバンド: -24dB 〜 +24dB (従来の2倍)
+        mapped['eq_sub_db'] = 24.0 * normalized_params[2]
+        mapped['eq_low_db'] = 24.0 * normalized_params[3]
+        mapped['eq_mid_db'] = 24.0 * normalized_params[4]
+        mapped['eq_high_db'] = 24.0 * normalized_params[5]
+        mapped['eq_presence_db'] = 24.0 * normalized_params[6]
 
-        # トランジェント: 正規化値そのまま
-        mapped['transient_attack'] = normalized_params[7]
-        mapped['transient_sustain'] = normalized_params[8]
+        # トランジェント: 正規化値を2倍に増幅
+        mapped['transient_attack'] = 2.0 * normalized_params[7]
+        mapped['transient_sustain'] = 2.0 * normalized_params[8]
 
-        # time_stretch: 0.5倍 〜 1.5倍
-        # -1 → 0.5, 0 → 1.0, +1 → 1.5
-        mapped['time_stretch_ratio'] = 1.0 + 0.5 * normalized_params[9]
+        # time_stretch: 0.25倍 〜 2.0倍 (より広い範囲)
+        # -1 → 0.25, 0 → 1.0, +1 → 2.0
+        mapped['time_stretch_ratio'] = 1.0 + 0.75 * normalized_params[9]
 
         return mapped
 

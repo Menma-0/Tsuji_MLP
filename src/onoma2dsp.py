@@ -23,16 +23,19 @@ class Onoma2DSP:
     """オノマトペから音声処理までのエンドツーエンドクラス"""
 
     def __init__(self, model_path: str, scaler_path: str = None,
-                 device: str = 'cpu', sample_rate: int = 44100):
+                 device: str = 'cpu', sample_rate: int = 44100,
+                 amplification_factor: float = 5.0):
         """
         Args:
             model_path: 学習済みモデルのパス
             scaler_path: スケーラーのパス
             device: デバイス ('cpu' or 'cuda')
             sample_rate: サンプリングレート
+            amplification_factor: モデル出力の増幅率（デフォルト5.0）
         """
         self.device = device
         self.sample_rate = sample_rate
+        self.amplification_factor = amplification_factor
 
         # 前処理モジュール
         self.katakana_converter = KatakanaToPhoneme()
@@ -103,6 +106,9 @@ class Onoma2DSP:
         with torch.no_grad():
             features_tensor = torch.FloatTensor(features).unsqueeze(0).to(self.device)
             normalized_params = self.model(features_tensor).cpu().numpy()[0]
+
+        # モデル出力を増幅（より大きな変化を生み出すため）
+        normalized_params = np.clip(normalized_params * self.amplification_factor, -1.0, 1.0)
 
         mapped_params = self.mapper.map_parameters(normalized_params)
 

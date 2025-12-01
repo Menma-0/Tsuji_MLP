@@ -84,8 +84,8 @@ def main():
 
     print(f"Selected {len(samples)} samples\n")
 
-    # 2. 出力フォルダ
-    output_dir = '../demo_audio/diverse_test'
+    # 2. 出力フォルダ（増幅版）
+    output_dir = '../demo_audio/diverse_test_amplified'
     os.makedirs(output_dir, exist_ok=True)
 
     # 3. モデルロード
