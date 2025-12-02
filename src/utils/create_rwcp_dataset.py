@@ -48,46 +48,46 @@ def create_dsp_template(onomatopoeia):
     # モーラ数
     mora_count = len(moras)
 
-    # ルール適用
+    # ルール適用（より感度を高くして、より多くのパターンに反応）
 
     # 1. Gain（音量）
-    if voiced_count > 2:
-        params[0] = 0.5  # 濁音多い → 大音量
-    elif high_consonants > 2:
-        params[0] = -0.3  # 高音系多い → 控えめ
+    if voiced_count >= 2:
+        params[0] = 0.3 + 0.2 * min(voiced_count, 4)  # 濁音 → 大音量
+    elif high_consonants >= 1:
+        params[0] = -0.2 - 0.1 * min(high_consonants, 3)  # 高音系 → 控えめ
 
     # 2. Compression（圧縮）
-    if voiced_count > 2:
-        params[1] = 0.4
+    if voiced_count >= 2:
+        params[1] = 0.3 + 0.1 * min(voiced_count, 4)
     elif sokuon_count > 0:
         params[1] = 0.3
 
     # 3. EQ Sub（超低域 80Hz）
-    if voiced_count > 2:
-        params[2] = 0.6  # 濁音 → 低音強化
-    elif high_consonants > 2:
-        params[2] = -0.4  # 高音系 → 低音カット
+    if voiced_count >= 2:
+        params[2] = 0.4 + 0.2 * min(voiced_count, 4)  # 濁音 → 低音強化
+    elif high_consonants >= 1:
+        params[2] = -0.3 - 0.1 * min(high_consonants, 3)  # 高音系 → 低音カット
 
     # 4. EQ Low（低域 250Hz）
-    if voiced_count > 1:
-        params[3] = 0.5
-    elif high_consonants > 2:
-        params[3] = -0.3
+    if voiced_count >= 1:
+        params[3] = 0.3 + 0.2 * min(voiced_count, 4)
+    elif high_consonants >= 1:
+        params[3] = -0.2 - 0.1 * min(high_consonants, 3)
 
     # 5. EQ Mid（中域 1kHz）
     params[4] = 0.0  # ニュートラル
 
     # 6. EQ High（高域 4kHz）
-    if high_consonants > 2:
-        params[5] = 0.6  # 高音系 → 高音強調
-    elif voiced_count > 2:
-        params[5] = -0.2  # 濁音 → 高音カット
+    if high_consonants >= 1:
+        params[5] = 0.4 + 0.2 * min(high_consonants, 4)  # 高音系 → 高音強調
+    elif voiced_count >= 2:
+        params[5] = -0.2 - 0.1 * min(voiced_count, 3)  # 濁音 → 高音カット
 
     # 7. EQ Presence（超高域 10kHz）
-    if high_consonants > 2:
-        params[6] = 0.7  # さらに強調
-    elif voiced_count > 2:
-        params[6] = -0.3
+    if high_consonants >= 1:
+        params[6] = 0.5 + 0.2 * min(high_consonants, 4)  # さらに強調
+    elif voiced_count >= 2:
+        params[6] = -0.2 - 0.1 * min(voiced_count, 3)
 
     # 8. Transient Attack（アタック）
     if sokuon_count > 0:

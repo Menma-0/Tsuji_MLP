@@ -1,0 +1,626 @@
+================================================================================
+ATTENTION FEATURE TEST
+================================================================================
+
+提案された方法1の実装テスト:
+- source_onomaのDSPテンプレートから注目度ベクトルを作成
+- 注目度が高い次元のΔDSPを強調
+
+
+================================================================================
+lambda_att = 0.0
+================================================================================
+(Attention機能OFF - 従来の差分ベースのみ)
+
+================================================================================
+[1] 高音系(チリン)から重低音系(ゴロゴロ)への変換
+    チリンは高音に注目 → 高音カットが強調されるはず
+================================================================================
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): チリン
+Target (desired sound): ゴロゴロ
+Input audio: ../selected_files/c1/bell2/033.wav
+Output audio: ../demo_audio/attention_test_0.0_1.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['ch', 'i', 'r', 'i', 'N']
+  Source moras: ['chi', 'ri', 'N']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['g', 'o', 'r', 'o', 'g', 'o', 'r', 'o']
+  Target moras: ['go', 'ro', 'go', 'ro']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 9.784
+
+[3/4] Predicting DSP parameters from feature difference...
+  Predicted parameters:
+    gain_db                  :   21.37 dB
+    compression              :    0.35
+    eq_sub_db                :   24.00 dB
+    eq_low_db                :   24.00 dB
+    eq_mid_db                :    0.02 dB
+    eq_high_db               :  -15.62 dB
+    eq_presence_db           :  -20.39 dB
+    transient_attack         :   -1.58
+    transient_sustain        :    0.56
+    time_stretch_ratio       :    0.89x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/c1/bell2/033.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_0.0_1.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: チリン
+    Target: ゴロゴロ
+    Feature diff magnitude: 9.784
+    Output: ../demo_audio/attention_test_0.0_1.wav
+
+================================================================================
+[2] 重低音系(ゴロゴロ)から高音系(キラキラ)への変換
+    ゴロゴロは低音に注目 → 低音カットが強調されるはず
+================================================================================
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): ゴロゴロ
+Target (desired sound): キラキラ
+Input audio: ../selected_files/c1/bell2/033.wav
+Output audio: ../demo_audio/attention_test_0.0_2.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['g', 'o', 'r', 'o', 'g', 'o', 'r', 'o']
+  Source moras: ['go', 'ro', 'go', 'ro']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['k', 'i', 'r', 'a', 'k', 'i', 'r', 'a']
+  Target moras: ['ki', 'ra', 'ki', 'ra']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 9.399
+
+[3/4] Predicting DSP parameters from feature difference...
+  Predicted parameters:
+    gain_db                  :  -11.89 dB
+    compression              :    1.11
+    eq_sub_db                :  -15.22 dB
+    eq_low_db                :  -24.00 dB
+    eq_mid_db                :   -0.01 dB
+    eq_high_db               :   16.68 dB
+    eq_presence_db           :   21.42 dB
+    transient_attack         :    2.00
+    transient_sustain        :   -1.59
+    time_stretch_ratio       :    1.58x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/c1/bell2/033.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_0.0_2.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: ゴロゴロ
+    Target: キラキラ
+    Feature diff magnitude: 9.399
+    Output: ../demo_audio/attention_test_0.0_2.wav
+
+================================================================================
+[3] 鋭い音(カッ)から鈍い音(ガッ)への変換
+    カッは促音でアタックに注目 → アタック変化が強調されるはず
+================================================================================
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): カッ
+Target (desired sound): ガッ
+Input audio: ../selected_files/a1/wood2/015.wav
+Output audio: ../demo_audio/attention_test_0.0_3.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['k', 'a', 'Q']
+  Source moras: ['ka', 'Q']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['g', 'a', 'Q']
+  Target moras: ['ga', 'Q']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 7.358
+
+[3/4] Predicting DSP parameters from feature difference...
+  Predicted parameters:
+    gain_db                  :  -12.64 dB
+    compression              :    0.05
+    eq_sub_db                :  -15.74 dB
+    eq_low_db                :    1.75 dB
+    eq_mid_db                :   -0.01 dB
+    eq_high_db               :   -1.92 dB
+    eq_presence_db           :   -1.03 dB
+    transient_attack         :    2.00
+    transient_sustain        :   -0.98
+    time_stretch_ratio       :    1.06x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/a1/wood2/015.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_0.0_3.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: カッ
+    Target: ガッ
+    Feature diff magnitude: 7.358
+    Output: ../demo_audio/attention_test_0.0_3.wav
+
+================================================================================
+lambda_att = 0.5
+================================================================================
+(Attention機能ON - 注目度による補正: 0.5倍)
+
+================================================================================
+[1] 高音系(チリン)から重低音系(ゴロゴロ)への変換
+    チリンは高音に注目 → 高音カットが強調されるはず
+================================================================================
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): チリン
+Target (desired sound): ゴロゴロ
+Input audio: ../selected_files/c1/bell2/033.wav
+Output audio: ../demo_audio/attention_test_0.5_1.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['ch', 'i', 'r', 'i', 'N']
+  Source moras: ['chi', 'ri', 'N']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['g', 'o', 'r', 'o', 'g', 'o', 'r', 'o']
+  Target moras: ['go', 'ro', 'go', 'ro']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 9.784
+
+[3/4] Predicting DSP parameters from feature difference...
+
+  [Attention Correction]
+    lambda_att: 0.50
+    Attention vector (top 5):
+      gain      : 0.000
+      comp      : 0.000
+      eq_sub    : 0.000
+      eq_low    : 0.000
+      eq_mid    : 0.000
+  Predicted parameters:
+    gain_db                  :   21.37 dB
+    compression              :    0.35
+    eq_sub_db                :   24.00 dB
+    eq_low_db                :   24.00 dB
+    eq_mid_db                :    0.02 dB
+    eq_high_db               :  -15.62 dB
+    eq_presence_db           :  -20.39 dB
+    transient_attack         :   -1.58
+    transient_sustain        :    0.56
+    time_stretch_ratio       :    0.89x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/c1/bell2/033.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_0.5_1.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: チリン
+    Target: ゴロゴロ
+    Feature diff magnitude: 9.784
+    Output: ../demo_audio/attention_test_0.5_1.wav
+
+================================================================================
+[2] 重低音系(ゴロゴロ)から高音系(キラキラ)への変換
+    ゴロゴロは低音に注目 → 低音カットが強調されるはず
+================================================================================
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): ゴロゴロ
+Target (desired sound): キラキラ
+Input audio: ../selected_files/c1/bell2/033.wav
+Output audio: ../demo_audio/attention_test_0.5_2.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['g', 'o', 'r', 'o', 'g', 'o', 'r', 'o']
+  Source moras: ['go', 'ro', 'go', 'ro']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['k', 'i', 'r', 'a', 'k', 'i', 'r', 'a']
+  Target moras: ['ki', 'ra', 'ki', 'ra']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 9.399
+
+[3/4] Predicting DSP parameters from feature difference...
+
+  [Attention Correction]
+    lambda_att: 0.50
+    Attention vector (top 5):
+      eq_low    : 1.000
+      gain      : 0.000
+      comp      : 0.000
+      eq_sub    : 0.000
+      eq_mid    : 0.000
+  Predicted parameters:
+    gain_db                  :  -11.89 dB
+    compression              :    1.11
+    eq_sub_db                :  -15.22 dB
+    eq_low_db                :  -24.00 dB
+    eq_mid_db                :   -0.01 dB
+    eq_high_db               :   16.68 dB
+    eq_presence_db           :   21.42 dB
+    transient_attack         :    2.00
+    transient_sustain        :   -1.59
+    time_stretch_ratio       :    1.58x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/c1/bell2/033.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_0.5_2.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: ゴロゴロ
+    Target: キラキラ
+    Feature diff magnitude: 9.399
+    Output: ../demo_audio/attention_test_0.5_2.wav
+
+================================================================================
+[3] 鋭い音(カッ)から鈍い音(ガッ)への変換
+    カッは促音でアタックに注目 → アタック変化が強調されるはず
+================================================================================
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): カッ
+Target (desired sound): ガッ
+Input audio: ../selected_files/a1/wood2/015.wav
+Output audio: ../demo_audio/attention_test_0.5_3.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['k', 'a', 'Q']
+  Source moras: ['ka', 'Q']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['g', 'a', 'Q']
+  Target moras: ['ga', 'Q']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 7.358
+
+[3/4] Predicting DSP parameters from feature difference...
+
+  [Attention Correction]
+    lambda_att: 0.50
+    Attention vector (top 5):
+      atk       : 1.000
+      comp      : 0.429
+      sus       : 0.429
+      gain      : 0.000
+      eq_sub    : 0.000
+  Predicted parameters:
+    gain_db                  :  -12.64 dB
+    compression              :    0.06
+    eq_sub_db                :  -15.74 dB
+    eq_low_db                :    1.75 dB
+    eq_mid_db                :   -0.01 dB
+    eq_high_db               :   -1.92 dB
+    eq_presence_db           :   -1.03 dB
+    transient_attack         :    2.00
+    transient_sustain        :   -1.19
+    time_stretch_ratio       :    1.06x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/a1/wood2/015.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_0.5_3.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: カッ
+    Target: ガッ
+    Feature diff magnitude: 7.358
+    Output: ../demo_audio/attention_test_0.5_3.wav
+
+================================================================================
+lambda_att = 1.0
+================================================================================
+(Attention機能ON - 注目度による補正: 1.0倍)
+
+================================================================================
+[1] 高音系(チリン)から重低音系(ゴロゴロ)への変換
+    チリンは高音に注目 → 高音カットが強調されるはず
+================================================================================
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): チリン
+Target (desired sound): ゴロゴロ
+Input audio: ../selected_files/c1/bell2/033.wav
+Output audio: ../demo_audio/attention_test_1.0_1.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['ch', 'i', 'r', 'i', 'N']
+  Source moras: ['chi', 'ri', 'N']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['g', 'o', 'r', 'o', 'g', 'o', 'r', 'o']
+  Target moras: ['go', 'ro', 'go', 'ro']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 9.784
+
+[3/4] Predicting DSP parameters from feature difference...
+
+  [Attention Correction]
+    lambda_att: 1.00
+    Attention vector (top 5):
+      gain      : 0.000
+      comp      : 0.000
+      eq_sub    : 0.000
+      eq_low    : 0.000
+      eq_mid    : 0.000
+  Predicted parameters:
+    gain_db                  :   21.37 dB
+    compression              :    0.35
+    eq_sub_db                :   24.00 dB
+    eq_low_db                :   24.00 dB
+    eq_mid_db                :    0.02 dB
+    eq_high_db               :  -15.62 dB
+    eq_presence_db           :  -20.39 dB
+    transient_attack         :   -1.58
+    transient_sustain        :    0.56
+    time_stretch_ratio       :    0.89x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/c1/bell2/033.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_1.0_1.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: チリン
+    Target: ゴロゴロ
+    Feature diff magnitude: 9.784
+    Output: ../demo_audio/attention_test_1.0_1.wav
+
+================================================================================
+[2] 重低音系(ゴロゴロ)から高音系(キラキラ)への変換
+    ゴロゴロは低音に注目 → 低音カットが強調されるはず
+================================================================================C:\Users\A6000-2\Documents\Tsuji_MLP\src\onoma2dsp.py:51: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.model.load_state_dict(torch.load(model_path, map_location=device))
+C:\Users\A6000-2\Documents\Tsuji_MLP\src\onoma2dsp.py:51: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.model.load_state_dict(torch.load(model_path, map_location=device))
+C:\Users\A6000-2\Documents\Tsuji_MLP\src\onoma2dsp.py:51: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.model.load_state_dict(torch.load(model_path, map_location=device))
+
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): ゴロゴロ
+Target (desired sound): キラキラ
+Input audio: ../selected_files/c1/bell2/033.wav
+Output audio: ../demo_audio/attention_test_1.0_2.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['g', 'o', 'r', 'o', 'g', 'o', 'r', 'o']
+  Source moras: ['go', 'ro', 'go', 'ro']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['k', 'i', 'r', 'a', 'k', 'i', 'r', 'a']
+  Target moras: ['ki', 'ra', 'ki', 'ra']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 9.399
+
+[3/4] Predicting DSP parameters from feature difference...
+
+  [Attention Correction]
+    lambda_att: 1.00
+    Attention vector (top 5):
+      eq_low    : 1.000
+      gain      : 0.000
+      comp      : 0.000
+      eq_sub    : 0.000
+      eq_mid    : 0.000
+  Predicted parameters:
+    gain_db                  :  -11.89 dB
+    compression              :    1.11
+    eq_sub_db                :  -15.22 dB
+    eq_low_db                :  -24.00 dB
+    eq_mid_db                :   -0.01 dB
+    eq_high_db               :   16.68 dB
+    eq_presence_db           :   21.42 dB
+    transient_attack         :    2.00
+    transient_sustain        :   -1.59
+    time_stretch_ratio       :    1.58x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/c1/bell2/033.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_1.0_2.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: ゴロゴロ
+    Target: キラキラ
+    Feature diff magnitude: 9.399
+    Output: ../demo_audio/attention_test_1.0_2.wav
+
+================================================================================
+[3] 鋭い音(カッ)から鈍い音(ガッ)への変換
+    カッは促音でアタックに注目 → アタック変化が強調されるはず
+================================================================================
+
+============================================================
+DIFFERENTIAL ONOMATOPOEIA TO DSP PROCESSING
+============================================================
+
+Source (current sound): カッ
+Target (desired sound): ガッ
+Input audio: ../selected_files/a1/wood2/015.wav
+Output audio: ../demo_audio/attention_test_1.0_3.wav
+
+[1/4] Extracting features from source onomatopoeia...
+  Source phonemes: ['k', 'a', 'Q']
+  Source moras: ['ka', 'Q']
+
+[2/4] Extracting features from target onomatopoeia...
+  Target phonemes: ['g', 'a', 'Q']
+  Target moras: ['ga', 'Q']
+
+  Feature difference vector: 38 dimensions
+  Difference magnitude: 7.358
+
+[3/4] Predicting DSP parameters from feature difference...
+
+  [Attention Correction]
+    lambda_att: 1.00
+    Attention vector (top 5):
+      atk       : 1.000
+      comp      : 0.429
+      sus       : 0.429
+      gain      : 0.000
+      eq_sub    : 0.000
+  Predicted parameters:
+    gain_db                  :  -12.64 dB
+    compression              :    0.08
+    eq_sub_db                :  -15.74 dB
+    eq_low_db                :    1.75 dB
+    eq_mid_db                :   -0.01 dB
+    eq_high_db               :   -1.92 dB
+    eq_presence_db           :   -1.03 dB
+    transient_attack         :    2.00
+    transient_sustain        :   -1.40
+    time_stretch_ratio       :    1.06x
+
+[4/4] Applying DSP effects to audio...
+
+Processing: ../selected_files/a1/wood2/015.wav
+Applying EQ...
+Applying compression...
+Applying transient shaper...
+Applying time stretch...
+Applying gain...
+Saved to: ../demo_audio/attention_test_1.0_3.wav
+
+============================================================
+PROCESSING COMPLETED SUCCESSFULLY!
+============================================================
+
+
+  [結果サマリー]
+    Source: カッ
+    Target: ガッ
+    Feature diff magnitude: 7.358
+    Output: ../demo_audio/attention_test_1.0_3.wav
+
+================================================================================
+テスト完了
+================================================================================
+
+生成されたファイル:
+  lambda_att = 0.0: 従来の差分ベース（ベースライン）
+  lambda_att = 0.5: 中程度のattention補正
+  lambda_att = 1.0: 強いattention補正
+
+各ケースで、source_onomaに応じた重点的な変化が観察できるはずです。
+例: 'チリン'→'ゴロゴロ'では、高音カットがより強調される

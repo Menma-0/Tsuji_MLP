@@ -17,6 +17,7 @@ from preprocessing.phoneme_to_mora import PhonemeToMora
 from preprocessing.feature_extractor import OnomatopoeiaFeatureExtractor
 from models.mlp_model import Onoma2DSPMLP, DSPParameterMapping
 from dsp.dsp_engine import DSPEngine
+from utils.create_rwcp_dataset import create_dsp_template
 
 
 class Onoma2DSP:
@@ -24,7 +25,8 @@ class Onoma2DSP:
 
     def __init__(self, model_path: str, scaler_path: str = None,
                  device: str = 'cpu', sample_rate: int = 44100,
-                 amplification_factor: float = 5.0):
+                 amplification_factor: float = 5.0,
+                 lambda_att: float = 0.5):
         """
         Args:
             model_path: 学習済みモデルのパス
@@ -32,10 +34,12 @@ class Onoma2DSP:
             device: デバイス ('cpu' or 'cuda')
             sample_rate: サンプリングレート
             amplification_factor: モデル出力の増幅率（デフォルト5.0）
+            lambda_att: attention補正の強度（デフォルト0.5、0で無効）
         """
         self.device = device
         self.sample_rate = sample_rate
         self.amplification_factor = amplification_factor
+        self.lambda_att = lambda_att
 
         # 前処理モジュール
         self.katakana_converter = KatakanaToPhoneme()
@@ -131,6 +135,41 @@ class Onoma2DSP:
 
         # モデル出力を増幅（より大きな変化を生み出すため）
         normalized_params = np.clip(normalized_params * self.amplification_factor, -1.0, 1.0)
+
+        # Attention機能: source_onomaから「ユーザがどこを聞いているか」を推定
+        if self.lambda_att > 0:
+            # source_onomaのDSPテンプレートを取得
+            template_source = create_dsp_template(source_onomatopoeia)
+
+            # 10次元配列に変換
+            temp_array = np.array(template_source)
+
+            # 絶対値を取って注目度ベクトルにする
+            attention = np.abs(temp_array)
+
+            # 0-1に正規化
+            max_att = np.max(attention)
+            if max_att > 1e-8:
+                attention = attention / max_att
+            attention = np.clip(attention, 0.0, 1.0)
+
+            # normalized_paramsを補正
+            # attention が大きい次元ほど変化を強調
+            normalized_params = normalized_params * (1.0 + self.lambda_att * attention)
+
+            # 再度クリッピング
+            normalized_params = np.clip(normalized_params, -1.0, 1.0)
+
+            if verbose:
+                print(f"\n  [Attention Correction]")
+                print(f"    lambda_att: {self.lambda_att:.2f}")
+                print(f"    Attention vector (top 5):")
+                # 注目度が高い順にソート
+                att_sorted = sorted(enumerate(attention), key=lambda x: x[1], reverse=True)
+                param_names = ['gain', 'comp', 'eq_sub', 'eq_low', 'eq_mid',
+                             'eq_high', 'eq_pres', 'atk', 'sus', 'stretch']
+                for idx, val in att_sorted[:5]:
+                    print(f"      {param_names[idx]:<10}: {val:.3f}")
 
         mapped_params = self.mapper.map_parameters(normalized_params)
 
