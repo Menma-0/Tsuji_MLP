@@ -62,7 +62,7 @@ def main():
         processor = Onoma2DSP(
             model_path='../models/rwcp_model.pth',
             scaler_path='../models/rwcp_scaler.pkl',
-            amplification_factor=5.0,
+            amplification_factor=1.0,
             lambda_att=lambda_val
         )
 

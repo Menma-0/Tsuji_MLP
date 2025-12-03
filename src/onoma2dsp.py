@@ -25,7 +25,7 @@ class Onoma2DSP:
 
     def __init__(self, model_path: str, scaler_path: str = None,
                  device: str = 'cpu', sample_rate: int = 44100,
-                 amplification_factor: float = 5.0,
+                 amplification_factor: float = 1.0,
                  lambda_att: float = 0.5):
         """
         Args:
@@ -33,7 +33,7 @@ class Onoma2DSP:
             scaler_path: スケーラーのパス
             device: デバイス ('cpu' or 'cuda')
             sample_rate: サンプリングレート
-            amplification_factor: モデル出力の増幅率（デフォルト5.0）
+            amplification_factor: モデル出力の増幅率（デフォルト1.0）
             lambda_att: attention補正の強度（デフォルト0.5、0で無効）
         """
         self.device = device
@@ -247,13 +247,13 @@ def main():
     parser.add_argument(
         '--model', '-m',
         type=str,
-        default='../models/saved_model.pth',
+        default='models/saved_model.pth',
         help='学習済みモデルのパス'
     )
     parser.add_argument(
-        '--scaler', '-s',
+        '--scaler', '-c',
         type=str,
-        default='../models/scaler.pkl',
+        default='models/scaler.pkl',
         help='スケーラーのパス'
     )
     parser.add_argument(

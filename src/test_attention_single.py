@@ -30,7 +30,7 @@ def main():
     processor_baseline = Onoma2DSP(
         model_path='../models/rwcp_model.pth',
         scaler_path='../models/rwcp_scaler.pkl',
-        amplification_factor=5.0,
+        amplification_factor=1.0,
         lambda_att=0.0
     )
 
@@ -49,7 +49,7 @@ def main():
     processor_attention = Onoma2DSP(
         model_path='../models/rwcp_model.pth',
         scaler_path='../models/rwcp_scaler.pkl',
-        amplification_factor=5.0,
+        amplification_factor=1.0,
         lambda_att=0.7
     )
 

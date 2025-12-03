@@ -1,0 +1,71 @@
+[
+  {
+    "id": 1,
+    "timestamp": "2025-12-03T13:39:32.743658",
+    "input_audio": "selected_files/c1/bell2/033.wav",
+    "source_onomatopoeia": "チリン",
+    "target_onomatopoeia": "ゴロゴロ",
+    "output_audio": "output/test_cli.wav",
+    "amplification_factor": 5.0,
+    "lambda_att": 0.7,
+    "feature_diff_magnitude": 9.78404712677002,
+    "mapped_params": {
+      "gain_db": 24.0,
+      "compression": 0.34836745262145996,
+      "eq_sub_db": 24.0,
+      "eq_low_db": 24.0,
+      "eq_mid_db": 0.015227420255541801,
+      "eq_high_db": -24.0,
+      "eq_presence_db": -24.0,
+      "transient_attack": -1.57929527759552,
+      "transient_sustain": 0.5599853992462158,
+      "time_stretch_ratio": 0.8929984234273434
+    }
+  },
+  {
+    "id": 2,
+    "timestamp": "2025-12-03T13:39:49.978609",
+    "input_audio": "selected_files/a1/teak1/001.wav",
+    "source_onomatopoeia": "コツコツ",
+    "target_onomatopoeia": "ドンドン",
+    "output_audio": "output/001_コツコツ_to_ドンドン_20251203_133949.wav",
+    "amplification_factor": 5.0,
+    "lambda_att": 0.7,
+    "feature_diff_magnitude": 10.015364646911621,
+    "mapped_params": {
+      "gain_db": 6.069781477634723,
+      "compression": -1.3497755527496338,
+      "eq_sub_db": 9.299898917858417,
+      "eq_low_db": 24.0,
+      "eq_mid_db": -0.042886873707175255,
+      "eq_high_db": -24.0,
+      "eq_presence_db": -24.0,
+      "transient_attack": -1.3894449472427368,
+      "transient_sustain": 0.4846816658973694,
+      "time_stretch_ratio": 0.8629861027002335
+    }
+  },
+  {
+    "id": 3,
+    "timestamp": "2025-12-03T19:04:25.057959",
+    "input_audio": "selected_files/c1/bell2/033.wav",
+    "source_onomatopoeia": "チリン",
+    "target_onomatopoeia": "ゴロゴロ",
+    "output_audio": "output/test_factor1.wav",
+    "amplification_factor": 1.0,
+    "lambda_att": 0.7,
+    "feature_diff_magnitude": 9.78404712677002,
+    "mapped_params": {
+      "gain_db": 5.55600882768631,
+      "compression": 0.06967349350452423,
+      "eq_sub_db": 7.458110117912292,
+      "eq_low_db": 10.566629076004029,
+      "eq_mid_db": 0.0030454841908067465,
+      "eq_high_db": -4.996943664550781,
+      "eq_presence_db": -6.93361805677414,
+      "transient_attack": -0.3158590495586395,
+      "transient_sustain": 0.1119970828294754,
+      "time_stretch_ratio": 0.9785996838472784
+    }
+  }
+]
