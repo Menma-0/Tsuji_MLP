@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "timestamp": "2025-12-10T04:08:40.360381",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "タッタッ",
+    "output_audio": "output/pair_test_jajja_to_tatta.wav",
+    "feature_diff_magnitude": 3.316624879837036,
+    "dsp_diff_raw": [
+      0.08750909566879272,
+      -0.6113994121551514,
+      -0.16483482718467712,
+      -0.0205036960542202,
+      0.414587140083313,
+      -0.43300217390060425,
+      -0.40526139736175537,
+      0.7118197083473206,
+      -0.2846570909023285,
+      -0.4158031940460205
+    ],
+    "mapped_params": {
+      "gain_db": 2.1002182960510254,
+      "compression": -1.2227988243103027,
+      "eq_sub_db": -3.956035852432251,
+      "eq_low_db": -0.4920887053012848,
+      "eq_mid_db": 9.950091361999512,
+      "eq_high_db": -10.392052173614502,
+      "eq_presence_db": -9.726273536682129,
+      "transient_attack": 1.4236394166946411,
+      "transient_sustain": -0.569314181804657,
+      "time_stretch_ratio": 0.6881476044654846
+    }
+  },
+  {
+    "id": 2,
+    "timestamp": "2025-12-10T04:09:00.766360",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "ドスドス",
+    "output_audio": "output/pair_test_jajja_to_dosudosu.wav",
+    "feature_diff_magnitude": 6.3442888259887695,
+    "dsp_diff_raw": [
+      0.08154189586639404,
+      -0.15000930428504944,
+      0.13185474276542664,
+      0.48175889253616333,
+      1.3539695739746094,
+      -0.9693724513053894,
+      -1.3940261602401733,
+      -0.5288293361663818,
+      0.16988661885261536,
+      0.2751203775405884
+    ],
+    "mapped_params": {
+      "gain_db": 1.957005500793457,
+      "compression": -0.3000186085700989,
+      "eq_sub_db": 3.1645138263702393,
+      "eq_low_db": 11.56221342086792,
+      "eq_mid_db": 24.0,
+      "eq_high_db": -23.264938831329346,
+      "eq_presence_db": -24.0,
+      "transient_attack": -1.0576586723327637,
+      "transient_sustain": 0.3397732377052307,
+      "time_stretch_ratio": 1.2063402831554413
+    }
+  },
+  {
+    "id": 3,
+    "timestamp": "2025-12-10T04:32:33.380016",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "タッタッ",
+    "output_audio": "demo_audio/test_walk1.wav",
+    "feature_diff_magnitude": 3.316624879837036,
+    "dsp_diff_raw": [
+      0.08750909566879272,
+      -0.6113994121551514,
+      -0.16483482718467712,
+      -0.0205036960542202,
+      0.414587140083313,
+      -0.43300217390060425,
+      -0.40526139736175537,
+      0.7118197083473206,
+      -0.2846570909023285,
+      -0.4158031940460205
+    ],
+    "mapped_params": {
+      "gain_db": 2.1002182960510254,
+      "compression": -1.2227988243103027,
+      "eq_sub_db": -3.956035852432251,
+      "eq_low_db": -0.4920887053012848,
+      "eq_mid_db": 9.950091361999512,
+      "eq_high_db": -10.392052173614502,
+      "eq_presence_db": -9.726273536682129,
+      "transient_attack": 1.4236394166946411,
+      "transient_sustain": -0.569314181804657,
+      "time_stretch_ratio": 0.6881476044654846
+    }
+  },
+  {
+    "id": 4,
+    "timestamp": "2025-12-10T04:35:57.120994",
+    "input_audio": "demo_audio/test_walk1.wav",
+    "source_onomatopoeia": "スタッスタッ",
+    "target_onomatopoeia": "カッカッ",
+    "output_audio": "demo_audio/test_walk2.wav",
+    "feature_diff_magnitude": 4.690415859222412,
+    "dsp_diff_raw": [
+      -0.09884977340698242,
+      -0.2221057116985321,
+      -0.1689138114452362,
+      -0.14779618382453918,
+      0.3337557315826416,
+      0.3881359398365021,
+      -0.16270054876804352,
+      1.3849067687988281,
+      -0.39975783228874207,
+      -0.7109959125518799
+    ],
+    "mapped_params": {
+      "gain_db": -2.372394561767578,
+      "compression": -0.4442114233970642,
+      "eq_sub_db": -4.053931474685669,
+      "eq_low_db": -3.5471084117889404,
+      "eq_mid_db": 8.010137557983398,
+      "eq_high_db": 9.31526255607605,
+      "eq_presence_db": -3.9048131704330444,
+      "transient_attack": 2.0,
+      "transient_sustain": -0.7995156645774841,
+      "time_stretch_ratio": 0.4667530655860901
+    }
+  }
+]
