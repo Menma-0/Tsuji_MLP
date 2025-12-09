@@ -140,14 +140,14 @@ class AudioDSPExtractor:
             band_energy = np.sum(D[band_mask]**2)
             band_energies[band_name] = band_energy / total_energy
 
-        # 各帯域の期待される比率（フラットな音の場合）
-        # 帯域幅に基づく期待値
+        # 各帯域の期待される比率（RWCPデータセットの平均値に基づく）
+        # analyze_eq_energy_distribution.py で計算した8542サンプルの平均
         expected_ratios = {
-            'sub': 0.05,
-            'low': 0.15,
-            'mid': 0.40,
-            'high': 0.25,
-            'presence': 0.15
+            'sub': 0.0041,       # 20-80Hz: 平均 0.41%
+            'low': 0.0206,       # 80-250Hz: 平均 2.06%
+            'mid': 0.3020,       # 250-2000Hz: 平均 30.20%
+            'high': 0.4555,      # 2000-6000Hz: 平均 45.55%
+            'presence': 0.2176   # 6000-20000Hz: 平均 21.76%
         }
 
         # 期待値との差を-1〜+1にマッピング

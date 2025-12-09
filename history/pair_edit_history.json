@@ -295,5 +295,71 @@
       "transient_sustain": 0.42947337245941164,
       "time_stretch_ratio": 1.257228955488652
     }
+  },
+  {
+    "id": 10,
+    "timestamp": "2025-12-10T05:48:24.178904",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "タッタッ",
+    "output_audio": "output/retrained_test_tatta.wav",
+    "feature_diff_magnitude": 3.316624879837036,
+    "dsp_diff_raw": [
+      0.0012403570860624314,
+      -0.6257266029715539,
+      -0.31973805820569395,
+      -0.33523936346173283,
+      0.18207135321199894,
+      -0.019178680229932073,
+      -0.21830968368798495,
+      1.1044302201420069,
+      -0.46822319214045993,
+      -0.44468894850462676
+    ],
+    "mapped_params": {
+      "gain_db": 0.02976857006549835,
+      "compression": -1.2514532059431078,
+      "eq_sub_db": -7.673713396936655,
+      "eq_low_db": -8.045744723081588,
+      "eq_mid_db": 4.369712477087974,
+      "eq_high_db": -0.46028832551836973,
+      "eq_presence_db": -5.239432408511639,
+      "transient_attack": 2.0,
+      "transient_sustain": -0.9364463842809199,
+      "time_stretch_ratio": 0.66648328862153
+    }
+  },
+  {
+    "id": 11,
+    "timestamp": "2025-12-10T05:48:31.526379",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "ドスドス",
+    "output_audio": "output/retrained_test_dosudosu.wav",
+    "feature_diff_magnitude": 6.3442888259887695,
+    "dsp_diff_raw": [
+      -0.1503313824534416,
+      0.19165590485930442,
+      1.0078744614496826,
+      0.35956478890776633,
+      0.29395415936410424,
+      0.23785757998935877,
+      -1.0249188570380212,
+      -0.5128155080080031,
+      0.2226180319786072,
+      0.1568721423484385
+    ],
+    "mapped_params": {
+      "gain_db": -3.6079531788825987,
+      "compression": 0.38331180971860884,
+      "eq_sub_db": 24.0,
+      "eq_low_db": 8.629554933786391,
+      "eq_mid_db": 7.054899824738502,
+      "eq_high_db": 5.708581919744611,
+      "eq_presence_db": -24.0,
+      "transient_attack": -1.0256310160160063,
+      "transient_sustain": 0.4452360639572144,
+      "time_stretch_ratio": 1.1176541067613288
+    }
   }
 ]
