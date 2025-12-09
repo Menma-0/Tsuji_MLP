@@ -28,7 +28,6 @@ def create_training_pairs(
     Args:
         input_csv: 音声ベースのDSPパラメータCSV
         output_csv: 出力する学習データCSV
-        max_pairs_per_onomatopoeia: 1つのオノマトペあたりの最大ペア数
         random_seed: 乱数シード
     """
     print("=" * 80)
