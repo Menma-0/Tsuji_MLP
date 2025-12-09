@@ -206,9 +206,9 @@ class DSPEngine:
         print("Applying transient shaper...")
         processed = self.apply_transient_shaper(processed, transient_attack, transient_sustain)
 
-        # 4. タイムストレッチを適用
-        print("Applying time stretch...")
-        processed = self.apply_time_stretch(processed, time_stretch_ratio)
+        # 4. タイムストレッチを適用（無効化：学習データの偏りにより予測精度が低いため）
+        # print("Applying time stretch...")
+        # processed = self.apply_time_stretch(processed, time_stretch_ratio)
 
         # 5. ゲインを適用
         print("Applying gain...")

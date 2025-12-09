@@ -132,7 +132,8 @@ class PairModelCLI:
         self.current_settings = {
             'model_path': 'models/pair_model.pth',
             'scaler_path': 'models/pair_scaler.pkl',
-            'sample_rate': 44100
+            'sample_rate': 44100,
+            'lambda_att': 0.5  # Attention補正の強度
         }
 
     def _initialize_processor(self):
@@ -142,9 +143,10 @@ class PairModelCLI:
             self.processor = PairModelProcessor(
                 model_path=self.current_settings['model_path'],
                 scaler_path=self.current_settings['scaler_path'],
-                sample_rate=self.current_settings['sample_rate']
+                sample_rate=self.current_settings['sample_rate'],
+                lambda_att=self.current_settings['lambda_att']
             )
-            print("Pair model loaded.\n")
+            print(f"Pair model loaded. (lambda_att={self.current_settings['lambda_att']})\n")
 
     def process_audio(self, input_audio, source_onoma, target_onoma, output_audio=None):
         """音声を処理"""
@@ -306,6 +308,7 @@ class PairModelCLI:
         print(f"  Model:       {self.current_settings['model_path']}")
         print(f"  Scaler:      {self.current_settings['scaler_path']}")
         print(f"  Sample Rate: {self.current_settings['sample_rate']}")
+        print(f"  Lambda Att:  {self.current_settings['lambda_att']} (Attention strength)")
         print()
 
     def update_settings(self, **kwargs):
@@ -316,7 +319,7 @@ class PairModelCLI:
                 print(f"Updated {key}: {value}")
 
         # プロセッサをリセット（次回使用時に再初期化）
-        if any(k in kwargs for k in ['model_path', 'scaler_path', 'sample_rate']):
+        if any(k in kwargs for k in ['model_path', 'scaler_path', 'sample_rate', 'lambda_att']):
             self.processor = None
 
     def clear_history(self):
@@ -386,7 +389,7 @@ class PairModelCLI:
                     if len(parts) < 3:
                         print("Error: set requires 2 arguments")
                         print("Usage: set <param> <value>")
-                        print("Available params: model_path, scaler_path, sample_rate")
+                        print("Available params: model_path, scaler_path, sample_rate, lambda_att")
                         continue
 
                     param = parts[1]
@@ -398,6 +401,14 @@ class PairModelCLI:
                             value = int(value)
                         except ValueError:
                             print(f"Error: {param} must be an integer")
+                            continue
+                    elif param == 'lambda_att':
+                        try:
+                            value = float(value)
+                            if not 0.0 <= value <= 2.0:
+                                print("Warning: lambda_att is typically between 0.0 and 1.0")
+                        except ValueError:
+                            print(f"Error: {param} must be a float")
                             continue
 
                     self.update_settings(**{param: value})
@@ -498,6 +509,8 @@ Examples:
                         help='Model path (default: models/pair_model.pth)')
     parser.add_argument('--scaler', default='models/pair_scaler.pkl',
                         help='Scaler path (default: models/pair_scaler.pkl)')
+    parser.add_argument('-a', '--attention', type=float, default=0.5,
+                        help='Attention strength lambda_att (default: 0.5, 0=off)')
     parser.add_argument('--history', type=int, metavar='N',
                         help='Show last N history entries')
     parser.add_argument('--detail', type=int, metavar='ID',
@@ -516,7 +529,8 @@ Examples:
     # 設定を更新
     cli.update_settings(
         model_path=args.model,
-        scaler_path=args.scaler
+        scaler_path=args.scaler,
+        lambda_att=args.attention
     )
 
     # 履歴クリア

@@ -130,5 +130,170 @@
       "transient_sustain": -0.7995156645774841,
       "time_stretch_ratio": 0.4667530655860901
     }
+  },
+  {
+    "id": 5,
+    "timestamp": "2025-12-10T04:40:51.815958",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "タッタッ",
+    "output_audio": "demo_audio/test_walk1.wav",
+    "feature_diff_magnitude": 3.316624879837036,
+    "dsp_diff_raw": [
+      0.08750909566879272,
+      -0.6113994121551514,
+      -0.16483482718467712,
+      -0.0205036960542202,
+      0.414587140083313,
+      -0.43300217390060425,
+      -0.40526139736175537,
+      0.7118197083473206,
+      -0.2846570909023285,
+      -0.4158031940460205
+    ],
+    "mapped_params": {
+      "gain_db": 2.1002182960510254,
+      "compression": -1.2227988243103027,
+      "eq_sub_db": -3.956035852432251,
+      "eq_low_db": -0.4920887053012848,
+      "eq_mid_db": 9.950091361999512,
+      "eq_high_db": -10.392052173614502,
+      "eq_presence_db": -9.726273536682129,
+      "transient_attack": 1.4236394166946411,
+      "transient_sustain": -0.569314181804657,
+      "time_stretch_ratio": 0.6881476044654846
+    }
+  },
+  {
+    "id": 6,
+    "timestamp": "2025-12-10T04:43:37.461254",
+    "input_audio": "demo_audio/test_walk1.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "カッカッ",
+    "output_audio": "demo_audio/test_walk2.wav",
+    "feature_diff_magnitude": 3.316624879837036,
+    "dsp_diff_raw": [
+      0.08750909566879272,
+      -0.6113994121551514,
+      -0.16483482718467712,
+      -0.0205036960542202,
+      0.414587140083313,
+      -0.43300217390060425,
+      -0.40526139736175537,
+      0.7118197083473206,
+      -0.2846570909023285,
+      -0.4158031940460205
+    ],
+    "mapped_params": {
+      "gain_db": 2.1002182960510254,
+      "compression": -1.2227988243103027,
+      "eq_sub_db": -3.956035852432251,
+      "eq_low_db": -0.4920887053012848,
+      "eq_mid_db": 9.950091361999512,
+      "eq_high_db": -10.392052173614502,
+      "eq_presence_db": -9.726273536682129,
+      "transient_attack": 1.4236394166946411,
+      "transient_sustain": -0.569314181804657,
+      "time_stretch_ratio": 0.6881476044654846
+    }
+  },
+  {
+    "id": 7,
+    "timestamp": "2025-12-10T04:45:12.118720",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "カッカッ",
+    "output_audio": "demo_audio/test_walk1.wav",
+    "feature_diff_magnitude": 3.316624879837036,
+    "dsp_diff_raw": [
+      0.08750909566879272,
+      -0.6113994121551514,
+      -0.16483482718467712,
+      -0.0205036960542202,
+      0.414587140083313,
+      -0.43300217390060425,
+      -0.40526139736175537,
+      0.7118197083473206,
+      -0.2846570909023285,
+      -0.4158031940460205
+    ],
+    "mapped_params": {
+      "gain_db": 2.1002182960510254,
+      "compression": -1.2227988243103027,
+      "eq_sub_db": -3.956035852432251,
+      "eq_low_db": -0.4920887053012848,
+      "eq_mid_db": 9.950091361999512,
+      "eq_high_db": -10.392052173614502,
+      "eq_presence_db": -9.726273536682129,
+      "transient_attack": 1.4236394166946411,
+      "transient_sustain": -0.569314181804657,
+      "time_stretch_ratio": 0.6881476044654846
+    }
+  },
+  {
+    "id": 8,
+    "timestamp": "2025-12-10T05:10:38.684106",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "タッタッ",
+    "output_audio": "output/pair_att_test_tatta.wav",
+    "feature_diff_magnitude": 3.316624879837036,
+    "dsp_diff_raw": [
+      0.11004268780350686,
+      -0.7734202563762665,
+      -0.21407923180609942,
+      -0.02696236031129956,
+      0.5200995672345161,
+      -0.5463404929190875,
+      -0.5149859206974506,
+      0.9579313725084067,
+      -0.3513380144461989,
+      -0.5150762066245079
+    ],
+    "mapped_params": {
+      "gain_db": 2.6410245072841647,
+      "compression": -1.546840512752533,
+      "eq_sub_db": -5.137901563346386,
+      "eq_low_db": -0.6470966474711894,
+      "eq_mid_db": 12.482389613628387,
+      "eq_high_db": -13.112171830058099,
+      "eq_presence_db": -12.359662096738816,
+      "transient_attack": 1.9158627450168133,
+      "transient_sustain": -0.7026760288923978,
+      "time_stretch_ratio": 0.613692845031619
+    }
+  },
+  {
+    "id": 9,
+    "timestamp": "2025-12-10T05:10:47.668670",
+    "input_audio": "demo_audio/test_walk.wav",
+    "source_onomatopoeia": "ジャッジャッ",
+    "target_onomatopoeia": "ドスドス",
+    "output_audio": "output/pair_att_test_dosudosu.wav",
+    "feature_diff_magnitude": 6.3442888259887695,
+    "dsp_diff_raw": [
+      0.10325242564082145,
+      -0.1931744815930724,
+      0.17297694066539404,
+      0.6470021926760673,
+      1.6985548305511473,
+      -1.2002042662724852,
+      -1.7775576075762511,
+      -0.682983087658882,
+      0.21473668622970582,
+      0.34297194065153597
+    ],
+    "mapped_params": {
+      "gain_db": 2.478058215379715,
+      "compression": -0.3863489631861448,
+      "eq_sub_db": 4.151446575969457,
+      "eq_low_db": 15.528052624225616,
+      "eq_mid_db": 24.0,
+      "eq_high_db": -24.0,
+      "eq_presence_db": -24.0,
+      "transient_attack": -1.365966175317764,
+      "transient_sustain": 0.42947337245941164,
+      "time_stretch_ratio": 1.257228955488652
+    }
   }
 ]

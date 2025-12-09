@@ -16,6 +16,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 from src.preprocessing.katakana_to_phoneme import KatakanaToPhoneme
 from src.preprocessing.phoneme_to_mora import PhonemeToMora
 from src.preprocessing.feature_extractor import OnomatopoeiaFeatureExtractor
+from src.preprocessing.phoneme_attention import PhonemeAttention
 from src.models.mlp_model import Onoma2DSPMLP, DSPParameterMapping
 from src.dsp.dsp_engine import DSPEngine
 
@@ -28,7 +29,8 @@ class PairModelProcessor:
         model_path: str,
         scaler_path: str,
         sample_rate: int = 44100,
-        device: str = 'cpu'
+        device: str = 'cpu',
+        lambda_att: float = 0.5
     ):
         """
         Args:
@@ -36,14 +38,17 @@ class PairModelProcessor:
             scaler_path: スケーラーのパス (pair_scaler.pkl)
             sample_rate: サンプリングレート
             device: デバイス
+            lambda_att: Attention補正の強度 (0.0で無効、1.0で最大)
         """
         self.device = device
         self.sample_rate = sample_rate
+        self.lambda_att = lambda_att
 
         # 前処理モジュール
         self.katakana_converter = KatakanaToPhoneme()
         self.mora_converter = PhonemeToMora()
         self.feature_extractor = OnomatopoeiaFeatureExtractor()
+        self.attention_calculator = PhonemeAttention()
 
         # モデルをロード（ペアモデルは hidden_dim=64, use_tanh=False）
         self.model = Onoma2DSPMLP(d_in=38, d_out=10, hidden_dim=64, use_tanh=False)
@@ -129,6 +134,45 @@ class PairModelProcessor:
             diff_tensor = torch.FloatTensor(feature_diff_scaled).unsqueeze(0).to(self.device)
             dsp_diff = self.model(diff_tensor).cpu().numpy()[0]
 
+        # Attention補正を適用
+        attention_info = None
+        if self.lambda_att > 0:
+            # sourceとtarget両方のAttentionを計算し、変化の方向を考慮
+            source_attention = self.attention_calculator.compute_attention(source_phonemes, source_moras)
+            target_attention = self.attention_calculator.compute_attention(target_phonemes, target_moras)
+
+            # Attention差分: target側で重要な特徴を強調
+            # target_attention が高い次元 → その方向への変化を強調
+            # source_attention が高い次元 → 元の特徴からの脱却を強調
+            attention_diff = target_attention - source_attention * 0.3
+            attention_diff = np.clip(attention_diff, 0.0, 1.0)
+
+            # 両方のAttentionを組み合わせた総合的な重み
+            combined_attention = (target_attention * 0.7 + source_attention * 0.3)
+            combined_attention = np.clip(combined_attention, 0.0, 1.0)
+
+            # DSP差分にAttention補正を適用
+            # Attentionが高い次元ほど変化を強調（1.0 + lambda * attention）
+            dsp_diff_original = dsp_diff.copy()
+            dsp_diff = dsp_diff * (1.0 + self.lambda_att * combined_attention)
+
+            attention_info = {
+                'source_attention': source_attention,
+                'target_attention': target_attention,
+                'combined_attention': combined_attention,
+                'dsp_diff_before': dsp_diff_original,
+                'dsp_diff_after': dsp_diff
+            }
+
+            if verbose:
+                print(f"\n  [Attention Correction] (lambda={self.lambda_att:.2f})")
+                param_names_short = ['gain', 'comp', 'sub', 'low', 'mid', 'high', 'pres', 'atk', 'sus', 'str']
+                print(f"    {'Param':<8} {'Source':>8} {'Target':>8} {'Combined':>8} {'Before':>8} {'After':>8}")
+                print("    " + "-" * 56)
+                for i, name in enumerate(param_names_short):
+                    print(f"    {name:<8} {source_attention[i]:>8.3f} {target_attention[i]:>8.3f} "
+                          f"{combined_attention[i]:>8.3f} {dsp_diff_original[i]:>+8.3f} {dsp_diff[i]:>+8.3f}")
+
         # DSP差分を実際のパラメータにマッピング
         # 差分なので-2〜+2の範囲がありえる、-1〜+1にクリップしてからマッピング
         dsp_diff_clipped = np.clip(dsp_diff, -1.0, 1.0)
@@ -166,7 +210,7 @@ class PairModelProcessor:
             print("=" * 70)
             print(f"\nOutput saved to: {output_audio_path}")
 
-        return {
+        result = {
             'source_onomatopoeia': source_onomatopoeia,
             'target_onomatopoeia': target_onomatopoeia,
             'source_phonemes': source_phonemes,
@@ -177,8 +221,19 @@ class PairModelProcessor:
             'dsp_diff_raw': dsp_diff.tolist(),
             'mapped_params': mapped_params,
             'input_audio': input_audio_path,
-            'output_audio': output_audio_path
+            'output_audio': output_audio_path,
+            'lambda_att': self.lambda_att
         }
+
+        # Attention情報を追加（有効な場合）
+        if attention_info is not None:
+            result['attention'] = {
+                'source': attention_info['source_attention'].tolist(),
+                'target': attention_info['target_attention'].tolist(),
+                'combined': attention_info['combined_attention'].tolist()
+            }
+
+        return result
 
 
 def main():
