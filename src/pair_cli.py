@@ -133,7 +133,8 @@ class PairModelCLI:
             'model_path': 'models/pair_model.pth',
             'scaler_path': 'models/pair_scaler.pkl',
             'sample_rate': 44100,
-            'lambda_att': 0.5  # Attention補正の強度
+            'lambda_att': 0.5,  # Attention補正の強度
+            'cumulative_mode': True  # 累積モード（デフォルトON）
         }
 
     def _initialize_processor(self):
@@ -144,9 +145,11 @@ class PairModelCLI:
                 model_path=self.current_settings['model_path'],
                 scaler_path=self.current_settings['scaler_path'],
                 sample_rate=self.current_settings['sample_rate'],
-                lambda_att=self.current_settings['lambda_att']
+                lambda_att=self.current_settings['lambda_att'],
+                use_cumulative=self.current_settings['cumulative_mode']
             )
-            print(f"Pair model loaded. (lambda_att={self.current_settings['lambda_att']})\n")
+            mode_str = "ON" if self.current_settings['cumulative_mode'] else "OFF"
+            print(f"Pair model loaded. (lambda_att={self.current_settings['lambda_att']}, cumulative={mode_str})\n")
 
     def process_audio(self, input_audio, source_onoma, target_onoma, output_audio=None):
         """音声を処理"""
@@ -193,7 +196,85 @@ class PairModelCLI:
         print(f"\n[Success] Saved to: {output_audio}")
         print(f"[History] Entry #{entry_id} recorded")
 
+        # 累積モードの情報を表示
+        if result.get('cumulative_mode') and 'cumulative' in result:
+            cumul = result['cumulative']
+            print(f"[Cumulative] Edit #{cumul['edit_number']} (continuing: {cumul['is_continuing']})")
+
         return result
+
+    def show_cumulative_state(self):
+        """累積状態を表示"""
+        self._initialize_processor()
+
+        if not self.processor.use_cumulative:
+            print("Cumulative mode is disabled.")
+            return
+
+        state = self.processor.get_cumulative_state()
+        if state is None:
+            print("No cumulative state available.")
+            return
+
+        print(f"\n{'='*60}")
+        print("Cumulative DSP State")
+        print(f"{'='*60}\n")
+
+        print(f"Original audio: {state.get('original_audio', 'Not set')}")
+        print(f"Total edits: {state.get('edit_count', 0)}")
+
+        print("\nCumulative Parameters:")
+        param_names = ['gain', 'compression', 'eq_sub', 'eq_low', 'eq_mid',
+                      'eq_high', 'eq_presence', 'attack', 'sustain', 'time_stretch']
+        params = state.get('cumulative_params', [0] * 10)
+        limits = state.get('param_limits', {})
+
+        print(f"  {'Param':<15} {'Current':>10} {'Min':>10} {'Max':>10}")
+        print("  " + "-" * 45)
+        for i, name in enumerate(param_names):
+            p_min, p_max = limits.get(name, (-1, 1))
+            print(f"  {name:<15} {params[i]:>+10.4f} {p_min:>+10.2f} {p_max:>+10.2f}")
+
+    def reset_cumulative(self):
+        """累積状態をリセット"""
+        self._initialize_processor()
+
+        if not self.processor.use_cumulative:
+            print("Cumulative mode is disabled.")
+            return
+
+        self.processor.reset_cumulative()
+        print("Cumulative state has been reset.")
+
+    def undo_last_edit(self):
+        """最後の編集を取り消す"""
+        self._initialize_processor()
+
+        if not self.processor.use_cumulative:
+            print("Cumulative mode is disabled. Undo is not available.")
+            return False
+
+        if self.processor.undo_last_edit():
+            print("Last edit undone successfully.")
+            return True
+        else:
+            print("No edits to undo.")
+            return False
+
+    def new_session(self, input_audio):
+        """新しい編集セッションを開始"""
+        self._initialize_processor()
+
+        if not self.processor.use_cumulative:
+            print("Cumulative mode is disabled.")
+            return
+
+        if not os.path.exists(input_audio):
+            print(f"Error: File not found: {input_audio}")
+            return
+
+        self.processor.start_new_session(input_audio)
+        print(f"New session started with: {input_audio}")
 
     def show_history(self, limit=10):
         """履歴を表示"""
@@ -309,6 +390,8 @@ class PairModelCLI:
         print(f"  Scaler:      {self.current_settings['scaler_path']}")
         print(f"  Sample Rate: {self.current_settings['sample_rate']}")
         print(f"  Lambda Att:  {self.current_settings['lambda_att']} (Attention strength)")
+        mode_str = "ON" if self.current_settings['cumulative_mode'] else "OFF"
+        print(f"  Cumulative:  {mode_str} (multi-edit quality preservation)")
         print()
 
     def update_settings(self, **kwargs):
@@ -343,11 +426,16 @@ class PairModelCLI:
         print("  clear                                       - Clear history")
         print("  help                                        - Show this help")
         print("  quit / exit                                 - Exit")
+        print("\nCumulative Mode Commands:")
+        print("  state                                       - Show cumulative DSP state")
+        print("  newsession <input>                          - Start new editing session")
+        print("  undo                                        - Undo last edit")
+        print("  resetcumul                                  - Reset cumulative params")
         print("\nExamples:")
         print("  > process demo_audio/test_walk.wav jiajia tatta")
         print("  > history 5")
-        print("  > detail 3")
-        print("  > replay 3 output/replayed.wav")
+        print("  > state")
+        print("  > undo")
         print("="*80)
 
         while True:
@@ -389,7 +477,7 @@ class PairModelCLI:
                     if len(parts) < 3:
                         print("Error: set requires 2 arguments")
                         print("Usage: set <param> <value>")
-                        print("Available params: model_path, scaler_path, sample_rate, lambda_att")
+                        print("Available params: model_path, scaler_path, sample_rate, lambda_att, cumulative_mode")
                         continue
 
                     param = parts[1]
@@ -409,6 +497,14 @@ class PairModelCLI:
                                 print("Warning: lambda_att is typically between 0.0 and 1.0")
                         except ValueError:
                             print(f"Error: {param} must be a float")
+                            continue
+                    elif param == 'cumulative_mode':
+                        if value.lower() in ['true', 'on', '1', 'yes']:
+                            value = True
+                        elif value.lower() in ['false', 'off', '0', 'no']:
+                            value = False
+                        else:
+                            print("Error: cumulative_mode must be true/false or on/off")
                             continue
 
                     self.update_settings(**{param: value})
@@ -458,6 +554,27 @@ class PairModelCLI:
                     confirm = input("Are you sure you want to clear all history? (y/N): ")
                     if confirm.lower() == 'y':
                         self.clear_history()
+
+                # 累積モード関連コマンド
+                elif cmd == 'state':
+                    self.show_cumulative_state()
+
+                elif cmd == 'newsession':
+                    if len(parts) < 2:
+                        print("Error: newsession requires an input file")
+                        print("Usage: newsession <input_audio>")
+                        continue
+
+                    input_audio = parts[1]
+                    self.new_session(input_audio)
+
+                elif cmd == 'undo':
+                    self.undo_last_edit()
+
+                elif cmd == 'resetcumul':
+                    confirm = input("Are you sure you want to reset cumulative parameters? (y/N): ")
+                    if confirm.lower() == 'y':
+                        self.reset_cumulative()
 
                 else:
                     print(f"Unknown command: {cmd}")
