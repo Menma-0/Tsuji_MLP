@@ -9,7 +9,10 @@
       "Bash(tree:*)",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(copy \"demo_audio\\diverse_test\\01_bell_original.wav\" \"demo_audio\\editing_test\\01_bell_original.wav\")",
+      "Bash(copy:*)",
+      "Bash(copy \"demo_audio\\diverse_test\\03_wood_original.wav\" \"demo_audio\\editing_test\\03_wood_original.wav\")"
     ],
     "deny": [],
     "ask": []
