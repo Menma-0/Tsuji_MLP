@@ -214,6 +214,98 @@ class Onoma2DSP:
 
         return result
 
+    def predict_dsp_params(self, source_onomatopoeia: str, target_onomatopoeia: str,
+                          verbose: bool = False) -> dict:
+        """
+        オノマトペからDSPパラメータのみを予測（音声処理なし）
+
+        Args:
+            source_onomatopoeia: 現在の音声を表すオノマトペ（カタカナ）
+            target_onomatopoeia: 編集後の音声を表すオノマトペ（カタカナ）
+            verbose: 詳細表示するか
+
+        Returns:
+            DSPパラメータの辞書
+        """
+        if verbose:
+            print(f"\n[Predicting DSP Parameters]")
+            print(f"  Source: {source_onomatopoeia}")
+            print(f"  Target: {target_onomatopoeia}")
+
+        # Source特徴量
+        source_phonemes = self.katakana_converter.convert(source_onomatopoeia)
+        source_moras = self.mora_converter.convert(source_phonemes)
+        source_features = self.feature_extractor.extract_features(source_phonemes, source_moras)
+
+        # Target特徴量
+        target_phonemes = self.katakana_converter.convert(target_onomatopoeia)
+        target_moras = self.mora_converter.convert(target_phonemes)
+        target_features = self.feature_extractor.extract_features(target_phonemes, target_moras)
+
+        # 差分を計算
+        feature_diff = target_features - source_features
+
+        if self.scaler is not None:
+            feature_diff = self.scaler.transform(feature_diff.reshape(1, -1))[0]
+
+        # モデルで推論
+        with torch.no_grad():
+            diff_tensor = torch.FloatTensor(feature_diff).unsqueeze(0).to(self.device)
+            normalized_params = self.model(diff_tensor).cpu().numpy()[0]
+
+        # 増幅
+        normalized_params = np.clip(normalized_params * self.amplification_factor, -1.0, 1.0)
+
+        # Attention補正
+        if self.lambda_att > 0:
+            template_source = create_dsp_template(source_onomatopoeia)
+            temp_array = np.array(template_source)
+            attention = np.abs(temp_array)
+            max_att = np.max(attention)
+            if max_att > 1e-8:
+                attention = attention / max_att
+            attention = np.clip(attention, 0.0, 1.0)
+            normalized_params = normalized_params * (1.0 + self.lambda_att * attention)
+            normalized_params = np.clip(normalized_params, -1.0, 1.0)
+
+        # パラメータマッピング
+        mapped_params = self.mapper.map_parameters(normalized_params)
+
+        if verbose:
+            print(f"  Predicted parameters:")
+            for key, value in mapped_params.items():
+                print(f"    {key:<25}: {value:>7.2f}")
+
+        return mapped_params
+
+    def apply_dsp_only(self, input_audio_path: str, output_audio_path: str,
+                      dsp_params: dict, verbose: bool = False):
+        """
+        与えられたDSPパラメータで音声処理のみ実行
+
+        Args:
+            input_audio_path: 入力音声ファイルパス
+            output_audio_path: 出力音声ファイルパス
+            dsp_params: DSPパラメータの辞書
+            verbose: 詳細表示するか
+        """
+        if verbose:
+            print(f"\n[Applying DSP Effects]")
+            print(f"  Input: {input_audio_path}")
+            print(f"  Output: {output_audio_path}")
+            print(f"  Parameters:")
+            for key, value in dsp_params.items():
+                print(f"    {key:<25}: {value:>7.2f}")
+
+        self.dsp_engine.process_audio_file(
+            input_audio_path,
+            output_audio_path,
+            dsp_params
+        )
+
+        if verbose:
+            print(f"  Processing completed!")
+
 
 def main():
     """メイン関数"""

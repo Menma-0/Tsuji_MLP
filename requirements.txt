@@ -17,3 +17,8 @@ scipy>=1.7.0
 # Optional: For Jupyter notebooks
 jupyter>=1.0.0
 ipykernel>=6.0.0
+
+# Web API
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6

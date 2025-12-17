@@ -9,7 +9,13 @@
       "Bash(tree:*)",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npx nuxi@latest init frontend)",
+      "Bash(npm install)",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "Bash(cat:*)",
+      "Bash(netstat:*)"
     ],
     "deny": [],
     "ask": []
